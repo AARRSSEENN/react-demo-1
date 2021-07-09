@@ -1,0 +1,40 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Gago",
+      "email": "gago111@gmail.com",
+      "password": "111111"
+    },
+    {
+      "id": 2,
+      "name": "Gago2",
+      "email": "gago222@gmail.com",
+      "password": "2222222"
+    },
+    {
+      "id": 3,
+      "name": "Gago3",
+      "email": "gago333@gmail.com",
+      "password": "333333"
+    },
+    {
+      "name": "Gago4",
+      "email": "dddddddd4444@gmail.com",
+      "password": "444444",
+      "id": 4
+    },
+    {
+      "name": "Gago5",
+      "email": "gago555@gmail.com",
+      "password": "555555",
+      "id": 5
+    },
+    {
+      "name": "Gago6",
+      "email": "gago666@gmail.com",
+      "password": "666666",
+      "id": 6
+    }
+  ]
+}
