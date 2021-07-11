@@ -10,7 +10,7 @@ class Registration extends Component{
         password : ""
     }
 
-    submitForm(name, email, password){
+    createUser(name, email, password){
         const user = {
             "name" : name,
             "email" : email,
@@ -33,51 +33,52 @@ class Registration extends Component{
 
 
     render(){
-        // console.log(this.props);
         return(
             <>
-                <label>
-                    Name
-                    <input
-                        type="text"
-                        onChange={(e)=>this.setState({name : e.target.value})}
-                        placeholder="Name"
-                        required/>
-                </label>
+                <form onSubmit={(e) => e.preventDefault()}>
+                    <label>
+                        Name
+                        <input
+                            type="text"
+                            onChange={(e)=>this.setState({name : e.target.value})}
+                            placeholder="Name"
+                            required/>
+                    </label>
 
-                <label>
-                    Email
-                    <input
-                        type="email"
-                        onChange={(e)=>this.setState({email : e.target.value})}
-                        placeholder="Please enter your email"
-                        required/>
-                </label>
+                    <label>
+                        Email
+                        <input
+                            type="email"
+                            onChange={(e)=>this.setState({email : e.target.value})}
+                            placeholder="Please enter your email"
+                            required/>
+                    </label>
 
-                <label>
-                    Password
-                    <input
-                        type="password"
-                        onChange={(e)=>this.setState({password : e.target.value})}
-                        placeholder="Password"
-                        required/>
-                </label>
+                    <label>
+                        Password
+                        <input
+                            type="password"
+                            onChange={(e)=>this.setState({password : e.target.value})}
+                            placeholder="Password"
+                            required/>
+                    </label>
 
-                <button
-                    type="submit"
-                    onClick={()=>this.submitForm(this.state.name, this.state.email, this.state.password)}
-                >
-                    Registry
-                </button>
+                    <button
+                        type="submit"
+                        onClick={()=>this.createUser(this.state.name, this.state.email, this.state.password)}
+                    >
+                        Registry
+                    </button>
 
-                <hr/>
+                    <hr/>
 
-                <button>
-                    <Link to="login">Login</Link>
-                </button>
-                <button>
-                    <Link to="/"> __Home__ </Link>
-                </button>
+                    <button>
+                        <Link to="login">Login</Link>
+                    </button>
+                    <button>
+                        <Link to="/"> __Home__ </Link>
+                    </button>
+                </form>
             </>
         )
     }
