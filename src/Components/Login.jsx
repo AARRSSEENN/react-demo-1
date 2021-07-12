@@ -9,25 +9,26 @@ class Login extends Component{
         password : ""
     }
 
-    loginFunctionality(email, password){
-        this.props.getCurrentUserData(email, password)
-        this.props.history.push('/')
-    }
+    loginHandler(email, password){
+        fetch(`http://localhost:3001/users?email=${email}&password=${password}`)
+            .then(response=>response.json())
+            .then(data => {
 
-    // getCurrentUserData(email, password){
-    //     fetch(`http://localhost:3001/users?email=${email}&password=${password}`)
-    //         .then(response=>response.json())
-    //         .then(data => {
-    //             if(data){
-    //                 localStorage.setItem("id", data[0].id)
-    //                 this.props.history.push('/')
-    //                 // const id = localStorage.getItem("id");
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //         })
-    // }
+                // bad solution data.length !== 0
+                if(data.length !== 0){
+                    const userId = data[0]?.id
+                    const userName = data[0]?.name
+                    localStorage.setItem("userData", JSON.stringify({userId, userName}))
+                    this.props.history.push('/')
+                    this.props.setUserData(userId, userName)
+                }else{
+                    throw new Error("data is empty")
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
 
     render(){
         return(
@@ -43,7 +44,7 @@ class Login extends Component{
                         <input type="password" onChange={(e) => {this.setState({password: e.target.value})}} placeholder="Password" required/>
                     </label>
 
-                    <button onClick={()=>this.loginFunctionality(this.state.email, this.state.password)}>Log in</button>
+                    <button onClick={()=>this.loginHandler(this.state.email, this.state.password)}>Log in</button>
 
                     <hr/>
 

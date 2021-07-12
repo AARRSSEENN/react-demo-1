@@ -35,6 +35,24 @@
       "email": "gago666@gmail.com",
       "password": "666666",
       "id": 6
+    },
+    {
+      "name": "Gago7",
+      "email": "gago7@gmail.com",
+      "password": "777777",
+      "id": 7
+    },
+    {
+      "name": "Gago8",
+      "email": "gago8@gmail.com",
+      "password": "888888",
+      "id": 8
+    },
+    {
+      "name": "Gago",
+      "email": "gago8@gmail.com",
+      "password": "3234343",
+      "id": 9
     }
   ]
 }

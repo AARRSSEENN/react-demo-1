@@ -7,32 +7,68 @@ class Registration extends Component{
     state = {
         name : "",
         email : "",
-        password : ""
+        password : "",
+        isNameTrue: true,
+        isEmailTrue : true,
+        isPasswordTrue : true
     }
 
-    createUser(name, email, password){
-        const user = {
-            "name" : name,
-            "email" : email,
-            "password" : password
+    createHandle = () => {
+        const {name, email, password, isEmailTrue, isPasswordTrue} = this.state;
+
+        const regName = /^[a-zA-Z]*$/
+        const nameTrue = regName.test(String(name).toLowerCase())
+
+        const regEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        const emailTrue = regEmail.test(String(email).toLowerCase())
+
+        const passwordTrue = (password.length >= 6 && password.length <= 10)
+
+        if(nameTrue && emailTrue && passwordTrue){
+            fetch("http://localhost:3001/users", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({name, email, password})
+            })
+                .then(() => {
+                    this.props.history.push("/login");
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        } else {
+            this.setState({
+                isNameTrue : nameTrue,
+                isEmailTrue : emailTrue,
+                isPasswordTrue : passwordTrue
+            })
         }
-        fetch("http://localhost:3001/users", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-            .then(() => {
-                this.props.history.push("/login");
-            })
-            .catch(error => {
-                console.log(error)
-            })
+    }
+
+    handleChange(event){
+        const targetName = event.target.name
+        const value = event.target.value
+        this.setState({[targetName] : value})
     }
 
 
     render(){
+
+        let nameError = (!this.state.isNameTrue) ?
+            (
+                <p>Name is incorrect</p>
+            ) : null
+        let emailError = (!this.state.isEmailTrue) ?
+            (
+                <p>Email is incorrect</p>
+            ) : null
+        let passwordError = (!this.state.isPasswordTrue) ?
+            (
+                <p>Password is incorrect</p>
+            ) : null
+
         return(
             <>
                 <form onSubmit={(e) => e.preventDefault()}>
@@ -40,7 +76,8 @@ class Registration extends Component{
                         Name
                         <input
                             type="text"
-                            onChange={(e)=>this.setState({name : e.target.value})}
+                            name="name"
+                            onChange={(e)=>this.handleChange(e)}
                             placeholder="Name"
                             required/>
                     </label>
@@ -49,7 +86,8 @@ class Registration extends Component{
                         Email
                         <input
                             type="email"
-                            onChange={(e)=>this.setState({email : e.target.value})}
+                            name="email"
+                            onChange={(e)=>this.handleChange(e)}
                             placeholder="Please enter your email"
                             required/>
                     </label>
@@ -58,17 +96,22 @@ class Registration extends Component{
                         Password
                         <input
                             type="password"
-                            onChange={(e)=>this.setState({password : e.target.value})}
+                            name="password"
+                            onChange={(e)=>this.handleChange(e)}
                             placeholder="Password"
                             required/>
                     </label>
 
                     <button
                         type="submit"
-                        onClick={()=>this.createUser(this.state.name, this.state.email, this.state.password)}
+                        onClick={this.createHandle}
                     >
                         Registry
                     </button>
+
+                    {nameError}
+                    {emailError}
+                    {passwordError}
 
                     <hr/>
 
