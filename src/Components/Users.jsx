@@ -1,9 +1,10 @@
 import {Component} from "react";
+import {Link} from "react-router-dom"
 
 class Users extends Component{
 
     state = {
-        data : []
+        data : ''
     }
 
     componentDidMount() {
@@ -21,7 +22,7 @@ class Users extends Component{
 
         const usersTable = this.state.data ? this.state.data.map(param => {
             return (
-                <tr>
+                <tr key={param.id}>
                     <td>{param.name}</td>
                     <td>{param.email}</td>
                 </tr>
@@ -31,12 +32,20 @@ class Users extends Component{
         return(
             <>
                 <table>
-                    <th>
-                        <td>Name</td>
-                        <td>Email</td>
-                    </th>
-                    {usersTable}
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {usersTable}
+                    </tbody>
                 </table>
+
+                <button>
+                    <Link to="/">Home</Link>
+                </button>
             </>
         )
     }

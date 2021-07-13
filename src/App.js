@@ -1,9 +1,12 @@
 import { Component } from "react"
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+
 import Login from "./Components/Login";
 import Registration from "./Components/Registration";
 import Users from "./Components/Users";
 import Home from "./Components/Home";
-import {BrowserRouter, Route, Switch, Link} from "react-router-dom";
+import PrivateRoute from "./Components/PrivateRoute";
+import RequireAuth from "./Components/RequireAuth";
 
 
 
@@ -11,63 +14,50 @@ import {BrowserRouter, Route, Switch, Link} from "react-router-dom";
 class App extends Component{
     
     state = {
-        isLogedIn: false,
-        userId: '',
-        userName: ''
+        isLogin: false,
     }
 
     componentDidMount(){
-        // data from storage if exist
-        const localData = JSON.parse(localStorage.getItem("userData"))
-        if(localData){
-            const {userId, userName} = localData
-            this.setState({isLogedIn: true, userId, userName})
+        const isLogin = (localStorage.getItem("userData")) ? true : false
+        if(isLogin){
+            this.setState({isLogin})
         }
     }
-
-    logoutFunctionality = () => {
-        // remove data
-        localStorage.removeItem("userData")
-        this.setState({isLogedIn: !this.state.isLogedIn, userId: '', userName: ''})
-    }
     
-    setData(userId, userName){
-        this.setState({isLogedIn: true, userId, userName})
+    afterLoginRenderApp = () => {
+        this.setState({isLogin: true})
+    }
+
+    afterLogoutRenderApp = () => {
+        this.setState({isLogin: false})
     }
     
     render(){
-
-        let login = !this.state.isLogedIn ? 
-            (
-                <Route path="/login">
-                    <Login setUserData = {(userId, userName) => this.setData(userId, userName)}/>
-                </Route>
-            ) : null
-
-        let registration = !this.state.isLogedIn ? 
-            (
-                <Route path="/registration">
-                    <Registration />
-                </Route>
-            ) : null
-
         return(
             <>
                 <BrowserRouter>
                     <Switch>
                         {/* access to login and registration links */}
-                        {login}
-                        {registration}
-                        <Route path="/users">
+                        <RequireAuth
+                            path="/login"
+                            isLogin = {this.state.isLogin}
+                        >
+                            <Login loginUser = {this.afterLoginRenderApp}/>
+                        </RequireAuth>
+                        <RequireAuth
+                            path="/registration"
+                            isLogin = {this.state.isLogin}
+                        >
+                            <Registration />
+                        </RequireAuth>
+                        <PrivateRoute
+                            path="/users"
+                            isLogin = {this.state.isLogin}
+                        >
                             <Users/>
-                        </Route>
+                        </PrivateRoute>
                         <Route exact path="/">
-                            <Home
-                                isLogedIn = {this.state.isLogedIn}
-                                userId = {this.state.userId}
-                                userName = {this.state.userName}
-                                userLogout = {this.logoutFunctionality}
-                            />
+                            <Home logoutUser = {this.afterLogoutRenderApp}/>
                         </Route>
                     </Switch>
                 </BrowserRouter>

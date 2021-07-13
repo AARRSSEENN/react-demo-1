@@ -3,21 +3,44 @@ import {Link} from "react-router-dom";
 
 class Home extends Component{
 
+    state = {
+        isLogin: false,
+        userId: '',
+        userName: ''
+    }
+
+    componentDidMount(){
+        // data from storage if exist
+        const localData = JSON.parse(localStorage.getItem("userData"))
+        if(localData){
+            const {userId, userName} = localData
+            this.setState({isLogin: true, userId, userName})
+        }
+    }
+
+    userLogout = () => {
+        // user logout
+        // remove data
+        localStorage.removeItem("userData")
+        this.setState({isLogin: !this.state.isLogin, userId: '', userName: ''})
+        this.props.logoutUser()
+    }
+
 
     render() {
 
-        console.log(this.props)
+        const {isLogin, userName} = this.state
 
-        let welcomeUser = this.props.isLogedIn ?
-            (
-                <h2>Welcome {this.props.userName}</h2>
-            ) : null
+        let welcomeUser = isLogin ? (<h2>Welcome {userName}</h2>) : null
 
-        // login and reg or logout buttons in home page
-        let buttons = this.props.isLogedIn ?
+        // login and reg or logout and users buttons in home page
+        let buttons = isLogin ?
             (
                 <>
-                    <button onClick={() => this.props.userLogout()}>
+                    <button>
+                        <Link to="users">Users List</Link>
+                    </button>
+                    <button onClick={this.userLogout}>
                         Logout
                     </button>
                 </>

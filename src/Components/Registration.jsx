@@ -13,8 +13,8 @@ class Registration extends Component{
         isPasswordTrue : true
     }
 
-    createHandle = () => {
-        const {name, email, password, isEmailTrue, isPasswordTrue} = this.state;
+    addNewUser = () => {
+        const {name, email, password} = this.state;
 
         const regName = /^[a-zA-Z]*$/
         const nameTrue = regName.test(String(name).toLowerCase())
@@ -104,7 +104,7 @@ class Registration extends Component{
 
                     <button
                         type="submit"
-                        onClick={this.createHandle}
+                        onClick={this.addNewUser}
                     >
                         Registry
                     </button>
