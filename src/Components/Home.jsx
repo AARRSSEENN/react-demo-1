@@ -1,29 +1,17 @@
 import {Component} from "react";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 class Home extends Component{
 
     state = {
-        isLogin: false,
         userId: '',
         userName: ''
     }
 
-    componentDidMount(){
-        // data from storage if exist
-        const localData = JSON.parse(localStorage.getItem("userData"))
-        if(localData){
-            const {userId, userName} = localData
-            this.setState({isLogin: true, userId, userName})
-        }
-    }
-
     userLogout = () => {
-        // user logout
-        // remove data
+        const {history} = this.props;
         localStorage.removeItem("userData")
-        this.setState({isLogin: !this.state.isLogin, userId: '', userName: ''})
-        this.props.logoutUser()
+        history.push('/login')
     }
 
 
@@ -69,4 +57,4 @@ class Home extends Component{
     }
 }
 
-export default Home;
+export default withRouter(Home);

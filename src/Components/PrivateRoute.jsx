@@ -3,7 +3,9 @@ import {Route, Redirect} from "react-router-dom";
 
 class PrivateRoute extends Component{
     render(){
-        const {isLogin, path, children} = this.props
+        const isLogin = !!localStorage.getItem("userData")
+
+        const {path, children} = this.props
         const showComponent = isLogin ?
             (children) :
             <Redirect to="/login"/>

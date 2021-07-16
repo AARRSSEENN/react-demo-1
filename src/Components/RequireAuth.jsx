@@ -3,10 +3,12 @@ import {Route, Redirect} from "react-router-dom";
 
 class RequireAuth extends Component{
     render(){
-        const {isLogin, path, children} = this.props
+        const isLogin = !!localStorage.getItem("userData")
+
+        const {path, children} = this.props
         const showComponent = !isLogin ?
             (children) :
-            <Redirect to="/"/>
+            <Redirect to="/home"/>
         return(
             <Route path={path}>
                 {showComponent}

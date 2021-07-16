@@ -5,7 +5,8 @@ import { withRouter } from "react-router";
 class Registration extends Component{
 
     state = {
-        name : "",
+        first_name : "",
+        last_name : "",
         email : "",
         password : "",
         isNameTrue: true,
@@ -14,23 +15,24 @@ class Registration extends Component{
     }
 
     addNewUser = () => {
-        const {name, email, password} = this.state;
+        const {first_name, last_name, email, password} = this.state;
 
         const regName = /^[a-zA-Z]*$/
-        const nameTrue = regName.test(String(name).toLowerCase())
+        const firstNameTrue = regName.test(String(first_name).toLowerCase())
+        const lastNameTrue = regName.test(String(last_name).toLowerCase())
 
         const regEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
         const emailTrue = regEmail.test(String(email).toLowerCase())
 
         const passwordTrue = (password.length >= 6 && password.length <= 10)
 
-        if(nameTrue && emailTrue && passwordTrue){
+        if(firstNameTrue && lastNameTrue && emailTrue && passwordTrue){
             fetch("http://localhost:3001/users", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({name, email, password})
+                body: JSON.stringify({first_name, last_name, email, password})
             })
                 .then(() => {
                     this.props.history.push("/login");
@@ -40,7 +42,8 @@ class Registration extends Component{
                 })
         } else {
             this.setState({
-                isNameTrue : nameTrue,
+
+                isNameTrue : firstNameTrue && lastNameTrue,
                 isEmailTrue : emailTrue,
                 isPasswordTrue : passwordTrue
             })
@@ -73,12 +76,22 @@ class Registration extends Component{
             <>
                 <form onSubmit={(e) => e.preventDefault()}>
                     <label>
-                        Name
+                        First name
                         <input
                             type="text"
-                            name="name"
+                            name="first_name"
                             onChange={(e)=>this.handleChange(e)}
-                            placeholder="Name"
+                            placeholder="First name"
+                            required/>
+                    </label>
+
+                    <label>
+                        Last name
+                        <input
+                            type="text"
+                            name="last_name"
+                            onChange={(e)=>this.handleChange(e)}
+                            placeholder="Last name"
                             required/>
                     </label>
 

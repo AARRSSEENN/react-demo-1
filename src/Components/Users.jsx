@@ -1,5 +1,7 @@
 import {Component} from "react";
 import {Link} from "react-router-dom"
+import {getUsers} from "../store/actions/usersAction";
+import {connect} from "react-redux";
 
 class Users extends Component{
 
@@ -11,7 +13,7 @@ class Users extends Component{
         fetch(`http://localhost:3001/users`)
             .then(response=>response.json())
             .then(data => {
-                this.setState({data})
+                this.props.getUsers(data)
                 })
             .catch(error => {
                 console.log(error);
@@ -20,10 +22,10 @@ class Users extends Component{
 
     render() {
 
-        const usersTable = this.state.data ? this.state.data.map(param => {
+        const usersTable = this.props.users ? this.props.users.map(param => {
             return (
                 <tr key={param.id}>
-                    <td>{param.name}</td>
+                    <td>{param.first_name + ' ' + param.last_name}</td>
                     <td>{param.email}</td>
                 </tr>
             )
@@ -51,4 +53,13 @@ class Users extends Component{
     }
 }
 
-export default Users;
+function mapStateToProps(state){
+    return {
+        users : state.users.users
+    }
+}
+
+const mapDispatchToProps = {
+    getUsers
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Users);
