@@ -15,10 +15,8 @@ class Login extends Component{
             .then(data => {
                 if(data.length !== 0){
                     const userId = data[0]?.id
-                    const userName = data[0]?.first_name + ' ' + data[0]?.last_name
-                    localStorage.setItem("userData", JSON.stringify({userId, userName}))
-                    this.props.history.push('/home')
-                    this.props.loginUser()
+                    localStorage.setItem("userId", JSON.stringify({userId}))
+                    this.props.history.push('/welcome')
                 }else{
                     throw new Error("data is empty")
                 }
@@ -50,7 +48,7 @@ class Login extends Component{
                         <Link to="registration">Please Sign up</Link>
                     </button>
                     <button>
-                        <Link to="/">__Home__</Link>
+                        <Link to="/">Home</Link>
                     </button>
                 </form>
             </>

@@ -1,9 +1,9 @@
 import { Component } from "react";
 import {Route, Redirect} from "react-router-dom";
 
-class RequireAuth extends Component{
+class NotAuthorized extends Component{
     render(){
-        const isLogin = !!localStorage.getItem("userData")
+        const isLogin = !!localStorage.getItem("userId")
 
         const {path, children} = this.props
         const showComponent = !isLogin ?
@@ -17,4 +17,4 @@ class RequireAuth extends Component{
     }
 }
 
-export default RequireAuth;
+export default NotAuthorized;

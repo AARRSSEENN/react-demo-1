@@ -6,52 +6,43 @@ import Registration from "./Components/Registration";
 import Users from "./Components/Users";
 import Home from "./Components/Home";
 import PrivateRoute from "./Components/PrivateRoute";
-import RequireAuth from "./Components/RequireAuth";
+import NotAuthorized from "./Components/NotAuthorized";
+import UserWelcome from "./Components/UserWelcome";
+import UserInfo from "./Components/UserInfo";
 
 
 class App extends Component {
-
-    // state = {
-    //     isLogin: false,
-    // }
-    //
-    // componentDidMount(){
-    //     const isLogin = !!localStorage.getItem("userData")
-    //     if(isLogin){
-    //         this.setState({isLogin})
-    //     }
-    // }
-    //
-    // afterLoginRenderApp = () => {
-    //     this.setState({isLogin: true})
-    // }
-    //
-    // afterLogoutRenderApp = () => {
-    //     this.setState({isLogin: false})
-    // }
 
     render() {
         return (
             <>
                 <BrowserRouter>
                     <Switch>
+                        
                         {/* access to login and registration links */}
-                        {/*<RequireAuth path="/login">*/}
-                        <RequireAuth exact path="/login">
+                        <NotAuthorized exact path="/login">
                             <Login/>
-                        </RequireAuth>
-                        {/*</RequireAuth>*/}
-                        {/*<RequireAuth path="/registration">*/}
-                        <RequireAuth exact path="/registration">
+                        </NotAuthorized>
+                        <NotAuthorized exact path="/registration">
                             <Registration/>
-                        </RequireAuth>
-                        {/*</RequireAuth>*/}
+                        </NotAuthorized>
+                        {/*  */}
+
                         <PrivateRoute path="/users">
                             <Users/>
                         </PrivateRoute>
-                        <PrivateRoute exact path="/home">
-                            <Home/>
+                        <PrivateRoute exact path="/info">
+                            <UserInfo/>
                         </PrivateRoute>
+                        <PrivateRoute exact path="/welcome">
+                            <UserWelcome/>
+                        </PrivateRoute>
+                        <NotAuthorized exact path="/home">
+                            <Home/>
+                        </NotAuthorized>
+
+                        {/* ???????? for path=/ */}
+                        
                     </Switch>
                 </BrowserRouter>
             </>

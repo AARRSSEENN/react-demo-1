@@ -3,7 +3,7 @@ import {Route, Redirect} from "react-router-dom";
 
 class PrivateRoute extends Component{
     render(){
-        const isLogin = !!localStorage.getItem("userData")
+        const isLogin = !!localStorage.getItem("userId")
 
         const {path, children} = this.props
         const showComponent = isLogin ?

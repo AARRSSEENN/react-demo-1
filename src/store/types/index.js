@@ -1,3 +1,4 @@
 const GET_USERS = "GET_USERS"
+const GET_USER_INFO = "GET_USER_INFO"
 
-export {GET_USERS}
+export {GET_USERS, GET_USER_INFO}

@@ -1,12 +1,13 @@
 import {Component} from "react"
 import {Link} from "react-router-dom";
 import { withRouter } from "react-router";
+import { userValidation } from "../store/services/userValidation";
 
 class Registration extends Component{
 
     state = {
         first_name : "",
-        last_name : "",
+        second_name : "",
         email : "",
         password : "",
         isNameTrue: true,
@@ -15,24 +16,18 @@ class Registration extends Component{
     }
 
     addNewUser = () => {
-        const {first_name, last_name, email, password} = this.state;
+        const {first_name, second_name, email, password} = this.state;
 
-        const regName = /^[a-zA-Z]*$/
-        const firstNameTrue = regName.test(String(first_name).toLowerCase())
-        const lastNameTrue = regName.test(String(last_name).toLowerCase())
+        const user_info = {first_name, second_name, email, password}
+        const {firstNameTrue, secondNameTrue, emailTrue, passwordTrue} = userValidation(user_info)
 
-        const regEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-        const emailTrue = regEmail.test(String(email).toLowerCase())
-
-        const passwordTrue = (password.length >= 6 && password.length <= 10)
-
-        if(firstNameTrue && lastNameTrue && emailTrue && passwordTrue){
+        if(firstNameTrue && secondNameTrue && emailTrue && passwordTrue){
             fetch("http://localhost:3001/users", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({first_name, last_name, email, password})
+                body: JSON.stringify({first_name, second_name, email, password})
             })
                 .then(() => {
                     this.props.history.push("/login");
@@ -42,8 +37,7 @@ class Registration extends Component{
                 })
         } else {
             this.setState({
-
-                isNameTrue : firstNameTrue && lastNameTrue,
+                isNameTrue : firstNameTrue && secondNameTrue,
                 isEmailTrue : emailTrue,
                 isPasswordTrue : passwordTrue
             })
@@ -86,12 +80,12 @@ class Registration extends Component{
                     </label>
 
                     <label>
-                        Last name
+                        Second name
                         <input
                             type="text"
-                            name="last_name"
+                            name="second_name"
                             onChange={(e)=>this.handleChange(e)}
-                            placeholder="Last name"
+                            placeholder="Second name"
                             required/>
                     </label>
 
@@ -132,7 +126,7 @@ class Registration extends Component{
                         <Link to="login">Login</Link>
                     </button>
                     <button>
-                        <Link to="/"> __Home__ </Link>
+                        <Link to="/"> Home </Link>
                     </button>
                 </form>
             </>
