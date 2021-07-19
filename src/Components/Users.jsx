@@ -44,7 +44,7 @@ class Users extends Component{
                 </table>
 
                 <button>
-                    <Link to="/welcome">Home</Link>
+                    <Link to="/">Home</Link>
                 </button>
             </>
         )

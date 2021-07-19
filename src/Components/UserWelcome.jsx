@@ -37,10 +37,10 @@ class UserWelcome extends Component{
                 {welcomeUser}
                 <hr/>
                 <button>
-                    <Link to="users">Users List</Link>
+                    <Link to="/users">Users List</Link>
                 </button>
                 <button>
-                    <Link to="info">User Profile</Link>
+                    <Link to="/info">User Profile</Link>
                 </button>
                 <button onClick={this.userLogout}>
                     Logout

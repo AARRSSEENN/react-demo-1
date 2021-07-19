@@ -34,12 +34,12 @@ class App extends Component {
                         <PrivateRoute exact path="/info">
                             <UserInfo/>
                         </PrivateRoute>
-                        <PrivateRoute exact path="/welcome">
+                        <PrivateRoute exact path="/">
                             <UserWelcome/>
                         </PrivateRoute>
-                        <NotAuthorized exact path="/home">
-                            <Home/>
-                        </NotAuthorized>
+                        {/*<NotAuthorized exact path="/home">*/}
+                        {/*    <Home/>*/}
+                        {/*</NotAuthorized>*/}
 
                         {/* ???????? for path=/ */}
                         

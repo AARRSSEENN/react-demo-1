@@ -1,11 +1,11 @@
 {
-    "users": [
-      {
-        "first_name": "GagoAAAA",
-        "second_name": "BBBBBB",
-        "email": "gago7@gmail.com",
-        "password": "111111",
-        "id": 1
-      }
-    ]
+  "users": [
+    {
+      "id": 1,
+      "first_name": "GagoAAAaaa",
+      "second_name": "BBBBBB",
+      "email": "gago7@gmail.com",
+      "password": "111111"
+    }
+  ]
 }

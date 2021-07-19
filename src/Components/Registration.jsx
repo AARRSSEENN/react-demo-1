@@ -123,7 +123,7 @@ class Registration extends Component{
                     <hr/>
 
                     <button>
-                        <Link to="login">Login</Link>
+                        <Link to="/login">Login</Link>
                     </button>
                     <button>
                         <Link to="/"> Home </Link>

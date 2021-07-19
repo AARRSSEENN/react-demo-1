@@ -3,8 +3,16 @@ import { withRouter } from "react-router";
 import {connect} from "react-redux";
 import {userInfoAction} from "../store/actions/userInfoAction";
 import { userValidation } from "../store/services/userValidation";
+import {Link} from "react-router-dom";
 
 class UserInfo extends Component{
+
+    state = {
+        first_name : '',
+        second_name : '',
+        email : '',
+        password : ''
+    }
 
     componentDidMount(){
         const {userId} = JSON.parse(localStorage.getItem("userId"))
@@ -12,28 +20,31 @@ class UserInfo extends Component{
         .then(response=>response.json())
         .then(data => {
             this.props.userInfoAction(data)
+            this.setState(data)
             })
         .catch(error => {
             console.log(error);
         })
     }
 
-    editUserInfo(tagname, value){
+    editUserInfo(tagName, value){
         const {user_info} = this.props
         const new_user_info = {
             ...user_info,
-            [tagname] : value
+            [tagName] : value
         }
-        this.props.userInfoAction(new_user_info)
+        this.setState(new_user_info)
     }
 
     saveChanges = () => {
-        const {user_info} = this.props
+        const {id} = this.props.user_info
+        const {first_name, second_name, email, password} = this.state
+        const user_info = {id, first_name, second_name, email, password}
 
         const {firstNameTrue, secondNameTrue, emailTrue, passwordTrue} = userValidation(user_info)
 
         if(firstNameTrue && secondNameTrue && emailTrue && passwordTrue){
-            fetch(`http://localhost:3001/users/${user_info.id}`, {
+            fetch(`http://localhost:3001/users/${id}`, {
                 method: "PUT",
                 headers: {
                     'Content-Type': 'application/json'
@@ -41,7 +52,7 @@ class UserInfo extends Component{
                 body: JSON.stringify({...user_info})
             })
                 .then(() => {
-                    this.props.history.push("/welcome");
+                    this.props.history.push("/");
                 })
                 .catch(error => {
                     console.log(error)
@@ -52,7 +63,7 @@ class UserInfo extends Component{
     }
 
     render(){
-        const {user_info} = this.props
+        const {first_name, second_name, email, password} = this.state
         return(
             <>
                 <form onSubmit={(e) => e.preventDefault()}>
@@ -61,7 +72,7 @@ class UserInfo extends Component{
                         <input
                             type="text"
                             name="first_name"
-                            value={user_info["first_name"]}
+                            value={first_name}
                             onChange={(e) => this.editUserInfo(e.target.name, e.target.value)}
                             placeholder="First name"
                             required/>
@@ -72,7 +83,7 @@ class UserInfo extends Component{
                         <input
                             type="text"
                             name="second_name"
-                            value={user_info["second_name"]}
+                            value={second_name}
                             onChange={(e) => this.editUserInfo(e.target.name, e.target.value)}
                             placeholder="Second name"
                             required/>
@@ -83,7 +94,7 @@ class UserInfo extends Component{
                         <input
                             type="email"
                             name="email"
-                            value={user_info["email"]}
+                            value={email}
                             onChange={(e) => this.editUserInfo(e.target.name, e.target.value)}
                             placeholder="Please enter your email"
                             required/>
@@ -94,7 +105,7 @@ class UserInfo extends Component{
                         <input
                             type="password"
                             name="password"
-                            value={user_info["password"]}
+                            value={password}
                             onChange={(e) => this.editUserInfo(e.target.name, e.target.value)}
                             placeholder="Password"
                             required/>
@@ -105,6 +116,10 @@ class UserInfo extends Component{
                         onClick={this.saveChanges}
                     >
                         Save
+                    </button>
+
+                    <button>
+                        <Link to="/">Home</Link>
                     </button>
 
                     <hr/>

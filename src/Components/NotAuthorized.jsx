@@ -8,7 +8,7 @@ class NotAuthorized extends Component{
         const {path, children} = this.props
         const showComponent = !isLogin ?
             (children) :
-            <Redirect to="/home"/>
+            <Redirect to="/"/>
         return(
             <Route path={path}>
                 {showComponent}

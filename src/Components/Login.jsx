@@ -16,7 +16,7 @@ class Login extends Component{
                 if(data.length !== 0){
                     const userId = data[0]?.id
                     localStorage.setItem("userId", JSON.stringify({userId}))
-                    this.props.history.push('/welcome')
+                    this.props.history.push('/')
                 }else{
                     throw new Error("data is empty")
                 }
