@@ -1,19 +1,16 @@
-import {Component} from "react"
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Switch} from "react-router-dom";
 
 import Login from "./Components/Login";
 import Registration from "./Components/Registration";
 import Users from "./Components/Users";
-import Home from "./Components/Home";
-import PrivateRoute from "./Components/PrivateRoute";
-import NotAuthorized from "./Components/NotAuthorized";
+import PrivateRoute from "./store/utils/PrivateRoute";
+import NotAuthorized from "./store/utils/NotAuthorized";
 import UserWelcome from "./Components/UserWelcome";
 import UserInfo from "./Components/UserInfo";
 
 
-class App extends Component {
+export default function App(){
 
-    render() {
         return (
             <>
                 <BrowserRouter>
@@ -27,7 +24,7 @@ class App extends Component {
                             <Registration/>
                         </NotAuthorized>
                         {/*  */}
-
+                        
                         <PrivateRoute path="/users">
                             <Users/>
                         </PrivateRoute>
@@ -36,18 +33,9 @@ class App extends Component {
                         </PrivateRoute>
                         <PrivateRoute exact path="/">
                             <UserWelcome/>
-                        </PrivateRoute>
-                        {/*<NotAuthorized exact path="/home">*/}
-                        {/*    <Home/>*/}
-                        {/*</NotAuthorized>*/}
-
-                        {/* ???????? for path=/ */}
-                        
+                        </PrivateRoute>                
                     </Switch>
                 </BrowserRouter>
             </>
         )
-    }
 }
-
-export default App;

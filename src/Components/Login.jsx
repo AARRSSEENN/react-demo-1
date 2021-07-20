@@ -1,24 +1,29 @@
-import {Component} from "react"
-import {Link} from "react-router-dom"
-import { withRouter } from "react-router"
+import {useState} from "react"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
+import {Link, useHistory} from "react-router-dom"
+import { requestSuccessAction, requestFailAction } from "../store/actions/loginAction"
 
-class Login extends Component{
+export default function Login(){
 
-    state = {
-        email : "",
-        password : ""
-    }
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
 
-    loginHandler = () => {
-        fetch(`http://localhost:3001/users?email=${this.state.email}&password=${this.state.password}`)
+    const {loading, success, fail} = useSelector(state => state.login)
+    const dispatch = useDispatch()
+    const history = useHistory()
+
+    const loginHandler = (email, password) => {
+        fetch(`http://localhost:3001/users?email=${email}&password=${password}`)
             .then(response=>response.json())
             .then(data => {
                 if(data.length !== 0){
+                    dispatch(() => requestSuccessAction())
                     const userId = data[0]?.id
                     localStorage.setItem("userId", JSON.stringify({userId}))
-                    this.props.history.push('/')
+                    history.push('/')
                 }else{
-                    throw new Error("data is empty")
+                    dispatch(() => requestFailAction())
                 }
             })
             .catch(error => {
@@ -26,21 +31,25 @@ class Login extends Component{
             })
     }
 
-    render(){
+    console.log(loading, success, fail)
+
+    let load = loading ? (<p>loading...</p>) : null
+
         return(
             <>
+            {load}
                 <form onSubmit={(e) => e.preventDefault()}>
                     <label>
                         Email
-                        <input type="email" onChange={(e) => {this.setState({email: e.target.value})}} placeholder="Username" required/>
+                        <input type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Username" required/>
                     </label>
 
                     <label>
                         Password
-                        <input type="password" onChange={(e) => {this.setState({password: e.target.value})}} placeholder="Password" required/>
+                        <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" required/>
                     </label>
 
-                    <button onClick={this.loginHandler}>Log in</button>
+                    <button onClick={loginHandler(email, password)}>Log in</button>
 
                     <hr/>
 
@@ -53,7 +62,4 @@ class Login extends Component{
                 </form>
             </>
         )
-    }
 }
-
-export default withRouter(Login);
