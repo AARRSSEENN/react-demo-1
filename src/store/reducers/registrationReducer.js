@@ -1,4 +1,4 @@
-import {LOGIN_REQUEST_FAIL, LOGIN_REQUEST_SUCCESS} from "../types"
+import {REGISTRATION_REQUEST_SUCCESS, REGISTRATION_REQUEST_FAIL} from "../types"
 
 const init_state = {
     loading : true,
@@ -6,16 +6,16 @@ const init_state = {
     fail : true
 }
 
-export function loginReducer(state = init_state, action){
+export function registrationReducer(state = init_state, action){
     switch (action.type){
-        case LOGIN_REQUEST_SUCCESS:
+        case REGISTRATION_REQUEST_SUCCESS:
             return {
                 ...state,
                 loading : false,
                 success : true,
                 fail : false
             }
-        case LOGIN_REQUEST_FAIL:
+        case REGISTRATION_REQUEST_FAIL:
             return {
                 ...state,
                 loading : false,

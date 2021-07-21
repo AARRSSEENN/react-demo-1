@@ -1,13 +1,13 @@
-import { REQUEST_SUCCESS, REQUEST_FAIL } from "../types"
+import { LOGIN_REQUEST_SUCCESS, LOGIN_REQUEST_FAIL } from "../types"
 
-export function requestSuccessAction(){
+export function loginSuccessAction(){
     return {
-        type : REQUEST_SUCCESS
+        type : LOGIN_REQUEST_SUCCESS
     }
 }
 
-export function requestFailAction(){
+export function loginFailAction(){
     return {
-        type : REQUEST_FAIL
+        type : LOGIN_REQUEST_FAIL
     }
 }

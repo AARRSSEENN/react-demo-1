@@ -1,24 +1,25 @@
-import {Component} from "react"
-import {Link} from "react-router-dom";
-import { withRouter } from "react-router";
+import {useState} from "react"
+import {Link, useHistory} from "react-router-dom";
 import { userValidation } from "../store/services/userValidation";
+import {useDispatch, useSelector} from "react-redux";
+import {registrationSuccessAction} from "../store/actions/registrationAction";
 
-class Registration extends Component{
+export default function Registration(){
 
-    state = {
-        first_name : "",
-        second_name : "",
-        email : "",
-        password : "",
-        isNameTrue: true,
-        isEmailTrue : true,
-        isPasswordTrue : true
-    }
+    const [firstName, setFirstName] = useState("")
+    const [secondName, setSecondName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [isNameTrue, setIsNameTrue] = useState(true)
+    const [isEmailTrue, setIsEmailTrue] = useState(true)
+    const [isPasswordTrue, setIsPasswordTrue] = useState(true)
+    const {loading, success, fail} = useSelector(state => state.registration)
+    const dispatch = useDispatch()
+    const history = useHistory()
 
-    addNewUser = () => {
-        const {first_name, second_name, email, password} = this.state;
+    const addNewUser = () => {
 
-        const user_info = {first_name, second_name, email, password}
+        const user_info = {firstName, secondName, email, password}
         const {firstNameTrue, secondNameTrue, emailTrue, passwordTrue} = userValidation(user_info)
 
         if(firstNameTrue && secondNameTrue && emailTrue && passwordTrue){
@@ -27,41 +28,31 @@ class Registration extends Component{
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({first_name, second_name, email, password})
+                body: JSON.stringify({firstName, secondName, email, password})
             })
                 .then(() => {
-                    this.props.history.push("/login");
+                    dispatch(registrationSuccessAction)
+                    history.push("/login");
                 })
                 .catch(error => {
                     console.log(error)
                 })
         } else {
-            this.setState({
-                isNameTrue : firstNameTrue && secondNameTrue,
-                isEmailTrue : emailTrue,
-                isPasswordTrue : passwordTrue
-            })
+            setIsNameTrue(firstNameTrue && secondNameTrue)
+            setIsEmailTrue(emailTrue)
+            setIsPasswordTrue(passwordTrue)
         }
     }
 
-    handleChange(event){
-        const targetName = event.target.name
-        const value = event.target.value
-        this.setState({[targetName] : value})
-    }
-
-
-    render(){
-
-        let nameError = (!this.state.isNameTrue) ?
+        let nameError = (!isNameTrue) ?
             (
                 <p>Name is incorrect</p>
             ) : null
-        let emailError = (!this.state.isEmailTrue) ?
+        let emailError = (!isEmailTrue) ?
             (
                 <p>Email is incorrect</p>
             ) : null
-        let passwordError = (!this.state.isPasswordTrue) ?
+        let passwordError = (!isPasswordTrue) ?
             (
                 <p>Password is incorrect</p>
             ) : null
@@ -74,7 +65,7 @@ class Registration extends Component{
                         <input
                             type="text"
                             name="first_name"
-                            onChange={(e)=>this.handleChange(e)}
+                            onChange={(e)=>setFirstName(e.target.value)}
                             placeholder="First name"
                             required/>
                     </label>
@@ -84,7 +75,7 @@ class Registration extends Component{
                         <input
                             type="text"
                             name="second_name"
-                            onChange={(e)=>this.handleChange(e)}
+                            onChange={(e)=>setSecondName(e.target.value)}
                             placeholder="Second name"
                             required/>
                     </label>
@@ -94,7 +85,7 @@ class Registration extends Component{
                         <input
                             type="email"
                             name="email"
-                            onChange={(e)=>this.handleChange(e)}
+                            onChange={(e)=>setEmail(e.target.value)}
                             placeholder="Please enter your email"
                             required/>
                     </label>
@@ -104,14 +95,14 @@ class Registration extends Component{
                         <input
                             type="password"
                             name="password"
-                            onChange={(e)=>this.handleChange(e)}
+                            onChange={(e)=>setPassword(e.target.value)}
                             placeholder="Password"
                             required/>
                     </label>
 
                     <button
                         type="submit"
-                        onClick={this.addNewUser}
+                        onClick={() => addNewUser}
                     >
                         Registry
                     </button>
@@ -131,7 +122,4 @@ class Registration extends Component{
                 </form>
             </>
         )
-    }
 }
-
-export default withRouter(Registration);

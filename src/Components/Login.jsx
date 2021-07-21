@@ -1,8 +1,8 @@
-import {useState} from "react"
+import {useCallback, useState} from "react"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import {Link, useHistory} from "react-router-dom"
-import { requestSuccessAction, requestFailAction } from "../store/actions/loginAction"
+import { loginSuccessAction, loginFailAction } from "../store/actions/loginAction"
 
 export default function Login(){
 
@@ -14,16 +14,17 @@ export default function Login(){
     const history = useHistory()
 
     const loginHandler = (email, password) => {
+
         fetch(`http://localhost:3001/users?email=${email}&password=${password}`)
             .then(response=>response.json())
             .then(data => {
                 if(data.length !== 0){
-                    dispatch(() => requestSuccessAction())
+                    dispatch(loginSuccessAction)
                     const userId = data[0]?.id
                     localStorage.setItem("userId", JSON.stringify({userId}))
                     history.push('/')
                 }else{
-                    dispatch(() => requestFailAction())
+                    dispatch(loginFailAction)
                 }
             })
             .catch(error => {
@@ -49,7 +50,7 @@ export default function Login(){
                         <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" required/>
                     </label>
 
-                    <button onClick={loginHandler(email, password)}>Log in</button>
+                    <button onClick={() => loginHandler(email, password)}>Log in</button>
 
                     <hr/>
 
