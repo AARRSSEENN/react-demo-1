@@ -2,8 +2,8 @@
   "users": [
     {
       "id": 1,
-      "first_name": "GagoAAAaaa",
-      "second_name": "BBBBBB",
+      "firstName": "GagoAAAaaa",
+      "secondName": "BBBBBB",
       "email": "gago7@gmail.com",
       "password": "111111"
     }

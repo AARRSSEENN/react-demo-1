@@ -1,8 +1,9 @@
-import {useCallback, useState} from "react"
+import { useCallback } from "react"
+import {useState, useEffect} from "react"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import {Link, useHistory} from "react-router-dom"
-import { loginSuccessAction, loginFailAction } from "../store/actions/loginAction"
+import { loginAction } from "../store/actions/loginAction"
 
 export default function Login(){
 
@@ -14,31 +15,33 @@ export default function Login(){
     const history = useHistory()
 
     const loginHandler = (email, password) => {
-
-        fetch(`http://localhost:3001/users?email=${email}&password=${password}`)
-            .then(response=>response.json())
-            .then(data => {
-                if(data.length !== 0){
-                    dispatch(loginSuccessAction)
-                    const userId = data[0]?.id
-                    localStorage.setItem("userId", JSON.stringify({userId}))
-                    history.push('/')
-                }else{
-                    dispatch(loginFailAction)
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        console.log(email, password)
+        dispatch(loginAction(email, password))
     }
 
-    console.log(loading, success, fail)
 
-    let load = loading ? (<p>loading...</p>) : null
+    // temporary solution
+    useEffect( () => {
+        dispatch({"type" : "LOGIN_REQUEST"})
+    }, [])
+
+
+
+    useEffect( () => {
+        console.log(loading, success, fail)
+        if(success){
+            history.push("/")
+        }
+        if(fail){
+            alert("something wrong")
+        }
+    }, [success, fail])
+
+    let loader = loading ? (<p>loading...</p>) : null
 
         return(
             <>
-            {load}
+            {loader}
                 <form onSubmit={(e) => e.preventDefault()}>
                     <label>
                         Email

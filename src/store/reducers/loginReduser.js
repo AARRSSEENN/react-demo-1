@@ -1,13 +1,20 @@
-import {LOGIN_REQUEST_FAIL, LOGIN_REQUEST_SUCCESS} from "../types"
+import {LOGIN_REQUEST_FAIL, LOGIN_REQUEST_SUCCESS, LOGIN_REQUEST} from "../types/loginTypes"
 
 const init_state = {
-    loading : true,
-    success : false,
-    fail : true
+    loading : false,
+    success : null,
+    fail : null
 }
 
 export function loginReducer(state = init_state, action){
     switch (action.type){
+        case LOGIN_REQUEST:
+            return {
+                ...state,
+                loading : true,
+                success : null,
+                fail : null
+            }
         case LOGIN_REQUEST_SUCCESS:
             return {
                 ...state,

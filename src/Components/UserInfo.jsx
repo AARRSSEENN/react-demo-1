@@ -1,9 +1,9 @@
-import {Component, useEffect, useState} from "react";
-import { withRouter } from "react-router";
+import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {userInfoAction} from "../store/actions/userInfoAction";
+import {getUserInfo, editUserInfo} from "../store/actions/userInfoAction";
 import { userValidation } from "../store/services/userValidation";
 import {Link, useHistory} from "react-router-dom";
+import { useCallback } from "react";
 
 export default function UserInfo(){
 
@@ -11,23 +11,36 @@ export default function UserInfo(){
     const [secondName, setSecondName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const {loading, success, fail} = useSelector(state => state.user_info)
+    const {edit_loading, edit_success, edit_fail, user_info} = useSelector(state => state.user_info)
     const dispatch = useDispatch()
     const history = useHistory()
 
     const {userId} = JSON.parse(localStorage.getItem("userId"))
 
-    useEffect(() => {
-            fetch(`http://localhost:3001/users/${userId}`)
-                .then(response=>response.json())
-                .then(data => {
-                    this.props.userInfoAction(data)
-                    this.setState(data)
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-    }, [])
+
+    const getUser = useCallback( (id = userId) => {
+        dispatch(getUserInfo(id))
+        const {firstName, secondName, email, password} = user_info
+        setFirstName(firstName)
+        setSecondName(secondName)
+        setEmail(email)
+        setPassword(password)
+    }, [userId, dispatch])
+
+    useEffect( () => {
+        getUser(userId)
+
+    }, [userId, getUser])
+
+    useEffect( () => {
+        console.log(edit_loading, edit_success, edit_fail)
+        if(edit_success){
+            history.push("/")
+        }
+        if(edit_fail){
+            alert("something wrong")
+        }
+    }, [edit_success, edit_fail])
 
     const saveChanges = () => {
         const user_info = {firstName, secondName, email, password}
@@ -35,27 +48,18 @@ export default function UserInfo(){
         const {firstNameTrue, secondNameTrue, emailTrue, passwordTrue} = userValidation(user_info)
 
         if(firstNameTrue && secondNameTrue && emailTrue && passwordTrue){
-            fetch(`http://localhost:3001/users/${userId}`, {
-                method: "PUT",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({...user_info})
-            })
-                .then(() => {
-                    history.push("/");
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+            editUserInfo(userId, user_info)
         } else {
             alert("incorrect data")
         }
     }
 
+    let loader = edit_loading ? (<p>loading...</p>) : null
+
         return(
             <>
                 <form onSubmit={(e) => e.preventDefault()}>
+                    {loader}
                     <label>
                         First name
                         <input
@@ -115,12 +119,4 @@ export default function UserInfo(){
                 </form>
             </>
         )
-}
-
-const mapStateToProps = (state) => {
-    return {user_info : state.user_info.user_info}
-}
-
-const mapDispatchToProps = {
-    userInfoAction
 }
