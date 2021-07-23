@@ -11,7 +11,8 @@ export default function UserInfo(){
     const [secondName, setSecondName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const {edit_loading, edit_success, edit_fail, user_info} = useSelector(state => state.user_info)
+    const [files, setFiles] = useState([])
+    const {get_success, get_fail, edit_loading, edit_success, edit_fail, user_info} = useSelector(state => state.user_info)
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -20,17 +21,31 @@ export default function UserInfo(){
 
     const getUser = useCallback( (id = userId) => {
         dispatch(getUserInfo(id))
-        const {firstName, secondName, email, password} = user_info
-        setFirstName(firstName)
-        setSecondName(secondName)
-        setEmail(email)
-        setPassword(password)
     }, [userId, dispatch])
 
     useEffect( () => {
         getUser(userId)
 
     }, [userId, getUser])
+
+    useEffect( () => {
+        const {firstName, secondName, email, password} = user_info
+        setFirstName(firstName)
+        setSecondName(secondName)
+        setEmail(email)
+        setPassword(password)
+    })
+
+
+    useEffect( () => {
+        console.log(edit_loading, edit_success, edit_fail)
+        if(edit_success){
+            history.push("/")
+        }
+        if(edit_fail){
+            alert("something wrong")
+        }
+    }, [edit_success, edit_fail])
 
     useEffect( () => {
         console.log(edit_loading, edit_success, edit_fail)
@@ -54,7 +69,42 @@ export default function UserInfo(){
         }
     }
 
+    const handleFileChange = (event) => {
+        const files = Array.from(event.target.files);
+        const promises = files.map(
+            (file) =>
+                new Promise((res) => {
+                    const reader = new FileReader();
+                    reader.readAsArrayBuffer(file);
+                    reader.onloadend = async () => {
+                        const blob = new Blob([reader.result]);
+                        const urlCreator = window.URL || window.webkitURL;
+                        file.blob_url = urlCreator.createObjectURL(blob);
+                        res();
+                    };
+                })
+        );
+        Promise.all(promises).then(() => {
+            setFiles(files);
+        });
+    }
+
     let loader = edit_loading ? (<p>loading...</p>) : null
+
+    const images = files.map( file => {
+        return (
+            <img
+                src={file.blob_url}
+                key={file.blob_url}
+                width="200px"
+                height="200px"
+                alt={file.name}
+            />
+        )
+    })
+
+    let previewFiles = (files.length !== 0) ? images : null
+
 
         return(
             <>
@@ -103,6 +153,14 @@ export default function UserInfo(){
                             placeholder="Password"
                             required/>
                     </label>
+
+                    <input
+                        type="file"
+                        multiple
+                        onChange={handleFileChange}
+                    />
+
+                    {previewFiles}
 
                     <button
                         type="submit"

@@ -1,10 +1,12 @@
 import * as types from "../types/userInfoTypes"
 
 const init_state = {
+    get_success : null,
+    get_fail : null,
     edit_loading : false,
     edit_success : null,
     edit_fail : null,
-    user_info : []
+    user_info : {}
 }
 
 export function userInfoReducer(state = init_state, action){
@@ -12,11 +14,15 @@ export function userInfoReducer(state = init_state, action){
         case types.GET_USER_INFO:
             return {
                 ...state,
-                user_info : action.payload
+                get_success : true,
+                get_fail : false,
+                user_info : action.payload,
             }
         case types.USER_INFO_REQUEST:
             return {
                 ...state,
+                get_success: null,
+                get_fail : null,
                 edit_loading : true,
                 edit_success : null,
                 edit_fail : null

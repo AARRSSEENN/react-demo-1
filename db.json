@@ -6,6 +6,13 @@
       "secondName": "BBBBBB",
       "email": "gago7@gmail.com",
       "password": "111111"
+    },
+    {
+      "id": 2,
+      "firstName": "GagoSSSS",
+      "secondName": "VVVVV",
+      "email": "gago77@gmail.com",
+      "password": "222222"
     }
   ]
 }

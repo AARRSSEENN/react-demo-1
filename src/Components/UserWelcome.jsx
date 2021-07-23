@@ -13,7 +13,7 @@ class UserWelcome extends Component{
         fetch(`http://localhost:3001/users/${userId}`)
         .then(response=>response.json())
         .then(data => {
-            const userName = data.first_name + ' ' + data.second_name
+            const userName = data.firstName + ' ' + data.secondName
             this.setState({isLogin : true, userName})
             })
         .catch(error => {
@@ -41,6 +41,9 @@ class UserWelcome extends Component{
                 </button>
                 <button>
                     <Link to="/info">User Profile</Link>
+                </button>
+                <button>
+                    <Link to="/event">Add Event</Link>
                 </button>
                 <button onClick={this.userLogout}>
                     Logout

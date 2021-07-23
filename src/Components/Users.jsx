@@ -1,36 +1,41 @@
-import {Component} from "react";
+import {useEffect, useState} from "react";
 import {Link} from "react-router-dom"
-import {usersAction} from "../store/actions/usersAction";
-import {connect} from "react-redux";
+import {getUsers} from "../store/actions/usersAction";
+import {useDispatch, useSelector} from "react-redux";
 
-class Users extends Component{
+export default function Users(){
 
-    componentDidMount() {
-        fetch(`http://localhost:3001/users`)
-            .then(response=>response.json())
-            .then(data => {
-                this.props.usersAction(data)
-                })
-            .catch(error => {
-                console.log(error);
-            })
-    }
+    const [allUsers, setAllUsers] = useState([])
+    const {loading, success, fail, users} = useSelector( state => state.users)
+    const dispatch = useDispatch()
 
-    render() {
+    useEffect( () => {
+        dispatch(getUsers())
+    }, [])
 
-        const {users} = this.props
+    useEffect( () => {
+        if(success){
+            setAllUsers(users)
+        }
+        if(fail){
+            alert("something wrong")
+        }
+    })
 
-        const usersTable = users ? users.map(param => {
-            return (
-                <tr key={param.id}>
-                    <td>{param.first_name + ' ' + param.second_name}</td>
-                    <td>{param.email}</td>
-                </tr>
-            )
-        }) : null
+    const loader = loading ? (<p>loading...</p>) : null
+
+    const usersTable = allUsers ? allUsers.map(param => {
+        return (
+            <tr key={param.id}>
+                <td>{param.firstName + ' ' + param.secondName}</td>
+                <td>{param.email}</td>
+            </tr>
+        )
+    }) : null
 
         return(
             <>
+                {loader}
                 <table>
                     <thead>
                         <tr>
@@ -48,16 +53,4 @@ class Users extends Component{
                 </button>
             </>
         )
-    }
 }
-
-const mapStateToProps = (state) => {
-    return {
-        users : state.users.users
-    }
-}
-
-const mapDispatchToProps = {
-    usersAction
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Users);
