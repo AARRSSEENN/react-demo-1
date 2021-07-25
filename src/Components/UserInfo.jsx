@@ -12,7 +12,7 @@ export default function UserInfo(){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [files, setFiles] = useState([])
-    const {get_success, get_fail, edit_loading, edit_success, edit_fail, user_info} = useSelector(state => state.user_info)
+    const {edit_loading, edit_success, edit_fail, user_info} = useSelector(state => state.user_info)
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -34,28 +34,26 @@ export default function UserInfo(){
         setSecondName(secondName)
         setEmail(email)
         setPassword(password)
-    })
+    }, [user_info])
 
 
     useEffect( () => {
-        console.log(edit_loading, edit_success, edit_fail)
         if(edit_success){
             history.push("/")
         }
         if(edit_fail){
             alert("something wrong")
         }
-    }, [edit_success, edit_fail])
+    }, [edit_success, edit_fail, history])
 
     useEffect( () => {
-        console.log(edit_loading, edit_success, edit_fail)
         if(edit_success){
             history.push("/")
         }
         if(edit_fail){
             alert("something wrong")
         }
-    }, [edit_success, edit_fail])
+    }, [edit_success, edit_fail, history])
 
     const saveChanges = () => {
         const user_info = {firstName, secondName, email, password}

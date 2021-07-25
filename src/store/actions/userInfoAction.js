@@ -43,21 +43,18 @@ const getUserInfoAction = (user_info) => {
 }
 
 const userInfoRequest =() => {
-    console.log("ok")
     return {
         type : types.USER_INFO_REQUEST
     }
 }
 
 const editUserInfoSuccess = () => {
-    console.log("success")
     return {
         type : types.EDIT_USER_INFO_SUCCESS
     }
 }
 
 const editUserInfoFail = () => {
-    console.log("fail")
     return {
         type : types.EDIT_USER_INFO_FAIL
     }

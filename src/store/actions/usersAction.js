@@ -24,21 +24,18 @@ const usersAction = (users) => {
 }
 
 const usersRequest =() => {
-    console.log("ok")
     return {
         type : types.USERS_REQUEST
     }
 }
 
 const usersSuccess = () => {
-    console.log("success")
     return {
         type : types.USERS_SUCCESS
     }
 }
 
 const usersFail = () => {
-    console.log("fail")
     return {
         type : types.USERS_FAIL
     }

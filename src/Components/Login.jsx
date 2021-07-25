@@ -1,4 +1,3 @@
-import { useCallback } from "react"
 import {useState, useEffect} from "react"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
@@ -15,7 +14,6 @@ export default function Login(){
     const history = useHistory()
 
     const loginHandler = (email, password) => {
-        console.log(email, password)
         dispatch(loginAction(email, password))
     }
 
@@ -23,19 +21,18 @@ export default function Login(){
     // temporary solution
     useEffect( () => {
         dispatch({"type" : "LOGIN_REQUEST"})
-    }, [])
+    }, [dispatch])
 
 
 
     useEffect( () => {
-        console.log(loading, success, fail)
         if(success){
             history.push("/")
         }
         if(fail){
             alert("something wrong")
         }
-    }, [success, fail])
+    }, [success, fail, history])
 
     let loader = loading ? (<p>loading...</p>) : null
 

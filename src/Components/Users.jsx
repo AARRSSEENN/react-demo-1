@@ -11,7 +11,7 @@ export default function Users(){
 
     useEffect( () => {
         dispatch(getUsers())
-    }, [])
+    }, [dispatch])
 
     useEffect( () => {
         if(success){
@@ -20,7 +20,7 @@ export default function Users(){
         if(fail){
             alert("something wrong")
         }
-    })
+    }, [success, fail, users])
 
     const loader = loading ? (<p>loading...</p>) : null
 

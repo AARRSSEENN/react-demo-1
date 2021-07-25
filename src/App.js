@@ -5,7 +5,7 @@ import Registration from "./Components/Registration";
 import Users from "./Components/Users";
 import PrivateRoute from "./store/utils/PrivateRoute";
 import NotAuthorized from "./store/utils/NotAuthorized";
-import UserWelcome from "./Components/UserWelcome";
+import Home from "./Components/Home";
 import UserInfo from "./Components/UserInfo";
 import AddEvent from "./Components/AddEvent";
 
@@ -36,7 +36,7 @@ export default function App(){
                             <AddEvent/>
                         </PrivateRoute>
                         <PrivateRoute exact path="/">
-                            <UserWelcome/>
+                            <Home/>
                         </PrivateRoute>
                     </Switch>
                 </BrowserRouter>

@@ -1,8 +1,12 @@
-import { Form, Field, useFormik } from "formik";
+import { useFormik } from "formik";
+import { Link } from "react-router-dom";
 import Select from 'react-select'
 import {useEffect, useMemo} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getUsers} from "../store/actions/usersAction";
+import DateTimePicker from "react-date-picker";
+import * as Yup from "yup";
+
 
 export default function AddEvent(){
 
@@ -12,8 +16,11 @@ export default function AddEvent(){
             title: '',
             description: '',
             isPrivate: false,
-            picked: null
+            picked: "0-12",
+            startDate: null,
+            endDate: null
         },
+        validationSchema: {addEventsSchema},
         onSubmit: values => {
             console.log(values)
         },
@@ -24,7 +31,7 @@ export default function AddEvent(){
 
     useEffect( () => {
         dispatch(getUsers())
-    }, [])
+    }, [dispatch])
 
     useEffect( () => {
         if(success){
@@ -33,12 +40,23 @@ export default function AddEvent(){
         if(fail){
             alert("something wrong")
         }
-    })
+    }, [success, fail])
 
     const handleSelectChange = (selectedUsers) => {
         const selectedValues = selectedUsers.map( user => user.value)
         formik.setFieldValue('options', selectedValues)
     }
+
+    const addEventsSchema = Yup.object().shape({
+        title: Yup.string()
+            .max(50, 'Too Long!')
+            .required('Required'),
+        description: Yup.string()
+            .max(200, 'Too Long!')
+            .required('Required'),
+        options: Yup.array()
+            .length(3, 'maximum 3 users')
+      });
 
     const loader = loading ? (<p>loading...</p>) : null
 
@@ -48,18 +66,42 @@ export default function AddEvent(){
             label: user.firstName + ' ' + user.secondName
         }))
     }, [users])
+
+    const select = formik.values.isPrivate ?  (
+        <>
+            <Select
+                isMulti
+                options={options}
+                onChange={ handleSelectChange }
+            />
+            <div>{formik.errors.options}</div>
+        </>
+    ) : null
+
     return(
          <form onSubmit={formik.handleSubmit}>
                 <label htmlFor="title">Title</label>
-                <input type="input" id="title" name="title" placeholder="Title" />
+                <input
+                    type="input"
+                    id="title"
+                    name="title"
+                    placeholder="Title"
+                    onChange={formik.handleChange}
+                />
 
                 <label htmlFor="description">Description</label>
-                <input type="textarea" id="description" name="description" placeholder="Description..." />
+                <input
+                    type="textarea"
+                    id="description"
+                    name="description"
+                    placeholder="Description..."
+                    onChange={formik.handleChange}
+                />
 
                 <div id="my-radio-group">Age</div>
-                <div role="group" aria-labelledby="my-radio-group">
+                <div role="group" aria-labelledby="my-radio-group" onChange={formik.handleChange}>
                     <label>
-                        <input type="radio" name="picked" value="0-12" />
+                        <input type="radio" name="picked" value="0-12" defaultChecked/>
                         0-12
                     </label>
                     <label>
@@ -74,19 +116,43 @@ export default function AddEvent(){
 
                 <label>
                     Private
-                    <input type="checkbox" name="isPrivate" />
+                    <input
+                        type="checkbox"
+                        name="isPrivate"
+                        onChange={formik.handleChange}
+                    />
                 </label>
 
                 {loader}
-                <Select
-                    isMulti
-                    options={options}
-                    onChange={ handleSelectChange }
-                />
 
-                <input type="date"/>
+                {select}
+
+
+                {/* <label>
+                    Start
+                    <DateTimePicker
+                        name="startDate"
+                        value={new Date().toLocaleString()}
+                        minDate={formik.values.startDate}
+                        onChange={(value) => {console.log(value)}}
+                        required
+                    />
+                </label> */}
+                {/* <label>
+                    End
+                    <DateTimePicker
+                        name="endDate"
+                        value={formik.values.endDate}
+                        minDate={formik.values.endDate}
+                        onChange={formik.handleChange}
+                    />
+                </label> */}
 
                 <button type="submit">Submit</button>
+
+                <button>
+                    <Link to="/">Home</Link>
+                </button>
          </form>
     )
 }
